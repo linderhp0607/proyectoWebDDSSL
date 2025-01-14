@@ -13,6 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", require("./routes/authRouter"));
 app.use("/api/students", require("./routes/studentRoutes"));
 app.use("/api/teachers", require("./routes/teacherRoutes"));
+app.use("/api/classrooms", require("./routes/classroomRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
