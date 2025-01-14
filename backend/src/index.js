@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 app.use("/api/auth", require("./routes/authRouter"));
+app.use("/api/students", require("./routes/studentRoutes"));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
