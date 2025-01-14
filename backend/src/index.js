@@ -9,8 +9,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rutas principales
-app.use("/api", require("./routes/mainRoutes"));
+// Rutas
+app.use("/api/auth", require("./routes/authRouter"));
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
