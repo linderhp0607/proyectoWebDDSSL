@@ -74,27 +74,19 @@ exports.deleteTeacher = async (req, res) => {
 
 // Subir hoja de vida
 exports.uploadHojaDeVida = async (req, res) => {
-  const { id } = req.params;
-
-  if (!req.file) {
-    return res.status(400).json({ message: "No se ha subido ningún archivo." });
-  }
-
-  const filePath = req.file.filename;
+  const id = req.params.id;
+  const fileName = req.file.filename; // Nombre del archivo subido
 
   try {
     await db.query("UPDATE docentes SET hoja_vida = ? WHERE id_docente = ?", [
-      filePath,
+      fileName,
       id,
     ]);
-    res.status(200).json({
-      message: "Hoja de vida subida con éxito.",
-      fileName: filePath,
-    });
+    res
+      .status(200)
+      .json({ message: "Hoja de vida subida con éxito", fileName });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "Error en el servidor al subir la hoja de vida." });
+    res.status(500).json({ message: "Error al subir hoja de vida" });
   }
 };

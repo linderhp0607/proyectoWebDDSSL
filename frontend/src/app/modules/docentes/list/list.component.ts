@@ -22,13 +22,22 @@ export class ListComponent implements OnInit {
 
   loadAllDocentes(): void {
     this.docentesService.getAllDocentes().subscribe((data: any[]) => {
-      this.docentes = data.map((doc: any) => ({ ...doc, editing: false }));
+      this.docentes = data.map((doc: any) => ({
+        ...doc,
+        hoja_vida_url: `http://localhost:5000/uploads/${doc.hoja_vida}`,
+        editing: false,
+      }));
     });
   }
 
   buscarPorDni(): void {
     if (this.searchDni.trim() === '') {
-      this.loadAllDocentes();
+      this.loadAllDocentes(); // Si el campo está vacío, carga todos los docentes
+      return;
+    }
+
+    if (this.searchDni.trim().length !== 8) {
+      // No hacer nada si el DNI no tiene 8 caracteres
       return;
     }
 
@@ -40,10 +49,11 @@ export class ListComponent implements OnInit {
       (error) => {
         if (error.status === 404) {
           alert('Docente no encontrado');
+          this.loadAllDocentes();
         } else {
           alert('Error al buscar docente');
+          this.loadAllDocentes();
         }
-        this.loadAllDocentes();
       }
     );
   }

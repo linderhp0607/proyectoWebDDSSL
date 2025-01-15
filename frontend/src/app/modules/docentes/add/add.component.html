@@ -1,1 +1,13 @@
-<p>add works!</p>
+<div class="mb-3">
+    <label for="hoja_vida" class="form-label">Hoja de Vida (PDF)</label>
+    <input
+      type="file"
+      id="hoja_vida"
+      (change)="onFileSelected($event)"
+      class="form-control"
+    />
+    <div *ngIf="selectedFileName" class="mt-2">
+      <strong>Archivo seleccionado:</strong> {{ selectedFileName }}
+    </div>
+  </div>
+  
