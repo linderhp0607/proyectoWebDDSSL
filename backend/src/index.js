@@ -9,6 +9,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Servir archivos estáticos de la carpeta uploads
+app.use("/uploads", express.static("uploads"));
+
 // Rutas
 app.use("/api/auth", require("./routes/authRouter"));
 app.use("/api/students", require("./routes/studentRoutes"));

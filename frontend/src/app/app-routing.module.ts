@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './modules/home/home.component'; // Importa el HomeComponent
 
 const routes: Routes = [
   { path: '', redirectTo: 'auth', pathMatch: 'full' },
@@ -27,6 +28,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/aulas/aulas.module').then((m) => m.AulasModule),
   },
+  { path: 'home', component: HomeComponent }, // Ruta al Home
   { path: '**', redirectTo: 'auth' },
 ];
 

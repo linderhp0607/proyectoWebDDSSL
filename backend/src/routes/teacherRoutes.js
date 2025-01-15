@@ -1,12 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const teacherController = require("../controllers/teacherController");
+const upload = require("../config/upload");
 
-// Rutas
-router.get("/", teacherController.getAllTeachers); // Listar docentes
-router.get("/:dni", teacherController.getTeacherByDNI); // Buscar por DNI
-router.post("/", teacherController.createTeacher); // Registrar docente
-router.put("/:id", teacherController.updateTeacher); // Actualizar docente
-router.delete("/:id", teacherController.deleteTeacher); // Eliminar docente
+// Rutas existentes
+router.get("/", teacherController.getAllTeachers);
+router.get("/dni/:dni", teacherController.getTeacherByDNI);
+router.post("/", teacherController.createTeacher);
+router.put("/:id", teacherController.updateTeacher);
+router.delete("/:id", teacherController.deleteTeacher);
+
+// Nueva ruta para subir hoja de vida
+router.post(
+  "/:id/upload",
+  upload.single("hoja_vida"),
+  teacherController.uploadHojaDeVida
+);
 
 module.exports = router;

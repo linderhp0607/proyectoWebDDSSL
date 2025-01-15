@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DocentesService } from '../docentes.service'; // Importa correctamente el servicio
-import { Router } from '@angular/router'; // Importa el Router para la navegación
+import { DocentesService } from '../docentes.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -22,7 +22,7 @@ export class ListComponent implements OnInit {
 
   loadAllDocentes(): void {
     this.docentesService.getAllDocentes().subscribe((data: any[]) => {
-      this.docentes = data;
+      this.docentes = data.map((doc: any) => ({ ...doc, editing: false }));
     });
   }
 
@@ -48,8 +48,20 @@ export class ListComponent implements OnInit {
     );
   }
 
-  editDocente(id: number): void {
-    this.router.navigate(['/docentes/edit', id]);
+  editDocente(docente: any): void {
+    docente.editing = true;
+  }
+
+  saveDocente(docente: any): void {
+    this.docentesService.updateDocente(docente.id_docente, docente).subscribe(
+      () => {
+        docente.editing = false;
+        alert('Docente actualizado con éxito.');
+      },
+      (error) => {
+        alert('Error al actualizar docente.');
+      }
+    );
   }
 
   deleteDocente(id: number): void {
@@ -64,5 +76,35 @@ export class ListComponent implements OnInit {
         }
       );
     }
+  }
+
+  onFileSelected(event: any, docente: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('hoja_vida', file);
+
+      this.docentesService
+        .uploadHojaDeVida(docente.id_docente, formData)
+        .subscribe(
+          (response) => {
+            alert('Hoja de vida subida con éxito.');
+            docente.hoja_vida = response.fileName;
+          },
+          (error) => {
+            alert('Error al subir la hoja de vida.');
+          }
+        );
+    }
+  }
+
+  // Función para redirigir al formulario de registro
+  registrarDocente(): void {
+    this.router.navigate(['/docentes/add']); // Ruta al formulario de registro
+  }
+
+  // Función para redirigir al inicio
+  irInicio(): void {
+    this.router.navigate(['/auth/home']); // Redirige a auth/home
   }
 }

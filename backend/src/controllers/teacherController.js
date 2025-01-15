@@ -1,4 +1,5 @@
 const db = require("../config/db");
+const path = require("path");
 
 // Listar todos los docentes
 exports.getAllTeachers = async (req, res) => {
@@ -68,5 +69,32 @@ exports.deleteTeacher = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
+  }
+};
+
+// Subir hoja de vida
+exports.uploadHojaDeVida = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.file) {
+    return res.status(400).json({ message: "No se ha subido ningún archivo." });
+  }
+
+  const filePath = req.file.filename;
+
+  try {
+    await db.query("UPDATE docentes SET hoja_vida = ? WHERE id_docente = ?", [
+      filePath,
+      id,
+    ]);
+    res.status(200).json({
+      message: "Hoja de vida subida con éxito.",
+      fileName: filePath,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error en el servidor al subir la hoja de vida." });
   }
 };
