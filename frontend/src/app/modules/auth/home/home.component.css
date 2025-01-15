@@ -1,0 +1,16 @@
+.btn-group-vertical {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+}
+
+.btn-group-vertical .btn {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
