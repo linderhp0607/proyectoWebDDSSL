@@ -1,1 +1,58 @@
-<p>add works!</p>
+<div class="container mt-5">
+  <h2 class="text-center">Registrar Estudiante</h2>
+  <form>
+    <div class="form-group">
+      <label for="nombres">Nombres</label>
+      <input
+        type="text"
+        id="nombres"
+        class="form-control"
+        placeholder="Ingrese nombres"
+      />
+    </div>
+    <div class="form-group mt-3">
+      <label for="apellidos">Apellidos</label>
+      <input
+        type="text"
+        id="apellidos"
+        class="form-control"
+        placeholder="Ingrese apellidos"
+      />
+    </div>
+    <div class="form-group mt-3">
+      <label for="dni">DNI</label>
+      <input
+        type="text"
+        id="dni"
+        class="form-control"
+        placeholder="Ingrese DNI"
+      />
+    </div>
+    <div class="form-group mt-3">
+      <label for="modalidad">Modalidad</label>
+      <select id="modalidad" class="form-control">
+        <option value="ordinario">Ordinario</option>
+        <option value="extraordinario">Extraordinario</option>
+      </select>
+    </div>
+    <div class="form-group mt-3">
+      <label for="carrera">Carrera Profesional</label>
+      <select id="carrera" class="form-control">
+        <option>Ingeniería</option>
+        <option>Medicina</option>
+        <option>Psicología</option>
+        <option>Derecho</option>
+        <option>Educación</option>
+      </select>
+    </div>
+    <div class="form-group mt-3">
+      <label for="turno">Turno</label>
+      <select id="turno" class="form-control">
+        <option>Mañana</option>
+        <option>Tarde</option>
+        <option>Noche</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success mt-4 w-100">Guardar</button>
+  </form>
+</div>
