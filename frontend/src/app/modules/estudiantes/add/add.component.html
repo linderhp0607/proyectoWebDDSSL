@@ -1,58 +1,121 @@
 <div class="container mt-5">
-  <h2 class="text-center">Registrar Estudiante</h2>
-  <form>
-    <div class="form-group">
-      <label for="nombres">Nombres</label>
+  <h2 class="text-center">Registro de Estudiantes</h2>
+  <form (ngSubmit)="registrarEstudiante()" #estudianteForm="ngForm">
+    <div class="mb-3">
+      <label for="nombres" class="form-label">Nombres</label>
       <input
         type="text"
         id="nombres"
         class="form-control"
-        placeholder="Ingrese nombres"
+        required
+        [(ngModel)]="estudiante.nombres"
+        name="nombres"
+        #nombres="ngModel"
       />
+      <div *ngIf="nombres.invalid && nombres.touched" class="text-danger">
+        El nombre es obligatorio.
+      </div>
     </div>
-    <div class="form-group mt-3">
-      <label for="apellidos">Apellidos</label>
+
+    <div class="mb-3">
+      <label for="apellidos" class="form-label">Apellidos</label>
       <input
         type="text"
         id="apellidos"
         class="form-control"
-        placeholder="Ingrese apellidos"
+        required
+        [(ngModel)]="estudiante.apellidos"
+        name="apellidos"
+        #apellidos="ngModel"
       />
+      <div *ngIf="apellidos.invalid && apellidos.touched" class="text-danger">
+        Los apellidos son obligatorios.
+      </div>
     </div>
-    <div class="form-group mt-3">
-      <label for="dni">DNI</label>
+
+    <div class="mb-3">
+      <label for="dni" class="form-label">DNI</label>
       <input
         type="text"
         id="dni"
         class="form-control"
-        placeholder="Ingrese DNI"
+        required
+        minlength="8"
+        maxlength="8"
+        pattern="[0-9]*"
+        [(ngModel)]="estudiante.dni"
+        name="dni"
+        #dni="ngModel"
       />
+      <div *ngIf="dni.invalid && dni.touched" class="text-danger">
+        El DNI es obligatorio y debe tener 8 dígitos numéricos.
+      </div>
     </div>
-    <div class="form-group mt-3">
-      <label for="modalidad">Modalidad</label>
-      <select id="modalidad" class="form-control">
+
+    <div class="mb-3">
+      <label for="modalidad" class="form-label">Modalidad</label>
+      <select
+        id="modalidad"
+        class="form-select"
+        required
+        [(ngModel)]="estudiante.modalidad"
+        name="modalidad"
+        #modalidad="ngModel"
+      >
         <option value="ordinario">Ordinario</option>
         <option value="extraordinario">Extraordinario</option>
       </select>
+      <div *ngIf="modalidad.invalid && modalidad.touched" class="text-danger">
+        Seleccione una modalidad.
+      </div>
     </div>
-    <div class="form-group mt-3">
-      <label for="carrera">Carrera Profesional</label>
-      <select id="carrera" class="form-control">
-        <option>Ingeniería</option>
-        <option>Medicina</option>
-        <option>Psicología</option>
-        <option>Derecho</option>
-        <option>Educación</option>
+
+    <div class="mb-3">
+      <label for="carrera" class="form-label">Carrera Profesional</label>
+      <select
+        id="carrera"
+        class="form-select"
+        required
+        [(ngModel)]="estudiante.carrera_profesional"
+        name="carrera_profesional"
+        #carrera="ngModel"
+      >
+        <option value="educación">Educación</option>
+        <option value="ingeniería de sistemas">Ingeniería de Sistemas</option>
+        <option value="derecho">Derecho</option>
+        <option value="psicología">Psicología</option>
+        <option value="medicina">Medicina</option>
       </select>
+      <div *ngIf="carrera.invalid && carrera.touched" class="text-danger">
+        Seleccione una carrera profesional.
+      </div>
     </div>
-    <div class="form-group mt-3">
-      <label for="turno">Turno</label>
-      <select id="turno" class="form-control">
-        <option>Mañana</option>
-        <option>Tarde</option>
-        <option>Noche</option>
+
+    <div class="mb-3">
+      <label for="turno" class="form-label">Turno</label>
+      <select
+        id="turno"
+        class="form-select"
+        required
+        [(ngModel)]="estudiante.turno"
+        name="turno"
+        #turno="ngModel"
+      >
+        <option value="mañana">Mañana</option>
+        <option value="tarde">Tarde</option>
+        <option value="noche">Noche</option>
       </select>
+      <div *ngIf="turno.invalid && turno.touched" class="text-danger">
+        Seleccione un turno.
+      </div>
     </div>
-    <button type="submit" class="btn btn-success mt-4 w-100">Guardar</button>
+
+    <button
+      type="submit"
+      class="btn btn-primary w-100"
+      [disabled]="estudianteForm.invalid"
+    >
+      Guardar
+    </button>
   </form>
 </div>

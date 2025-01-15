@@ -29,4 +29,8 @@ export class EstudiantesService {
   getEstudianteByDni(dni: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/${dni}`);
   }
+
+  createEstudiante(estudiante: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, estudiante);
+  }
 }

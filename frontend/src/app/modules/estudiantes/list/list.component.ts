@@ -30,12 +30,12 @@ export class ListComponent implements OnInit {
       this.loadAllEstudiantes();
       return;
     }
-  
+
     if (this.searchDni.length !== 8) {
       // No realizar la búsqueda si el DNI no tiene 8 dígitos
       return;
     }
-  
+
     this.estudiantesService.getEstudianteByDni(this.searchDni).subscribe(
       (data) => {
         this.estudiantes = [data]; // Mostrar solo el estudiante encontrado
@@ -51,7 +51,6 @@ export class ListComponent implements OnInit {
       }
     );
   }
-  
 
   // Habilitar edición de estudiante
   editEstudiante(estudiante: any): void {
