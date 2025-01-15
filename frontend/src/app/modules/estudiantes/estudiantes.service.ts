@@ -25,4 +25,8 @@ export class EstudiantesService {
   deleteEstudiante(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  getEstudianteByDni(dni: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${dni}`);
+  }
 }
