@@ -10,14 +10,15 @@
       />
       <button class="btn btn-primary ms-3">Buscar</button>
     </div>
-    <div class="d-flex gap-2"> <!-- Agrega gap para el espacio entre botones -->
+    <div class="d-flex gap-2">
+      <!-- Agrega gap para el espacio entre botones -->
       <button class="btn btn-success" routerLink="/estudiantes/add">
         Registrar Estudiante
       </button>
       <button class="btn btn-secondary" routerLink="/auth/home">Inicio</button>
     </div>
   </div>
-  
+
   <table class="table table-striped mt-3">
     <thead>
       <tr>
@@ -32,22 +33,20 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Juan</td>
-        <td>Pérez</td>
-        <td>12345678</td>
-        <td>Ordinario</td>
-        <td>Ingeniería</td>
-        <td>Mañana</td>
+      <tr *ngFor="let estudiante of estudiantes; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ estudiante.nombres }}</td>
+        <td>{{ estudiante.apellidos }}</td>
+        <td>{{ estudiante.dni }}</td>
+        <td>{{ estudiante.modalidad }}</td>
+        <td>{{ estudiante.carrera_profesional }}</td>
+        <td>{{ estudiante.turno }}</td>
         <td>
-          <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-warning btn-sm">Editar</button>
-            <button class="btn btn-danger btn-sm">Eliminar</button>
-            <button class="btn btn-success btn-sm">Guardar</button>
-          </div>
+          <button class="btn btn-warning btn-sm">Editar</button>
+          <button class="btn btn-danger btn-sm">Eliminar</button>
+          <button class="btn btn-success btn-sm">Guardar</button>
         </td>
       </tr>
-    </tbody>
+    </tbody>    
   </table>
 </div>
