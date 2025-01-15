@@ -108,12 +108,10 @@ export class ListComponent implements OnInit {
     }
   }
 
-  // Función para redirigir al formulario de registro
   registrarDocente(): void {
     this.router.navigate(['/docentes/add']); // Ruta al formulario de registro
   }
 
-  // Función para redirigir al inicio
   irInicio(): void {
     this.router.navigate(['/auth/home']); // Redirige a auth/home
   }

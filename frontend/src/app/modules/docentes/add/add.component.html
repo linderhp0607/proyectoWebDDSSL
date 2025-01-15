@@ -1,13 +1,80 @@
-<div class="mb-3">
-    <label for="hoja_vida" class="form-label">Hoja de Vida (PDF)</label>
-    <input
-      type="file"
-      id="hoja_vida"
-      (change)="onFileSelected($event)"
-      class="form-control"
-    />
-    <div *ngIf="selectedFileName" class="mt-2">
-      <strong>Archivo seleccionado:</strong> {{ selectedFileName }}
+<div class="container mt-5">
+  <h2 class="text-center">Registrar Docente</h2>
+  <form (ngSubmit)="registrarDocente()" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="nombres">Nombres:</label>
+      <input
+        type="text"
+        id="nombres"
+        name="nombres"
+        [(ngModel)]="docente.nombres"
+        class="form-control"
+      />
     </div>
-  </div>
-  
+
+    <div class="form-group">
+      <label for="apellidos">Apellidos:</label>
+      <input
+        type="text"
+        id="apellidos"
+        name="apellidos"
+        [(ngModel)]="docente.apellidos"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="dni">DNI:</label>
+      <input
+        type="text"
+        id="dni"
+        name="dni"
+        [(ngModel)]="docente.dni"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="curso">Curso:</label>
+      <select
+        id="curso"
+        name="curso"
+        [(ngModel)]="docente.curso"
+        class="form-select"
+      >
+        <option value="matematica">Matemática</option>
+        <option value="literatura">Literatura</option>
+        <option value="fisica">Física</option>
+        <option value="filosofía">Filosofía</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="turno">Turno:</label>
+      <select
+        id="turno"
+        name="turno"
+        [(ngModel)]="docente.turno"
+        class="form-select"
+      >
+        <option value="mañana">Mañana</option>
+        <option value="tarde">Tarde</option>
+        <option value="noche">Noche</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="hoja_vida">Hoja de Vida:</label>
+      <input
+        type="file"
+        id="hoja_vida"
+        (change)="onFileSelected($event)"
+        class="form-control"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">
+      Registrar Docente
+    </button>
+  </form>
+</div>

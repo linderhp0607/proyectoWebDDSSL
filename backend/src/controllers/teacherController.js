@@ -31,7 +31,17 @@ exports.getTeacherByDNI = async (req, res) => {
 
 // Registrar un nuevo docente
 exports.createTeacher = async (req, res) => {
-  const { nombres, apellidos, dni, hoja_vida, curso, turno } = req.body;
+  const { nombres, apellidos, dni, curso, turno } = req.body;
+  const hoja_vida = req.file?.filename;
+
+  console.log({ nombres, apellidos, dni, curso, turno, hoja_vida }); // Verifica los datos recibidos
+
+  if (!nombres || !apellidos || !dni || !curso || !turno || !hoja_vida) {
+    return res
+      .status(400)
+      .json({ message: "Todos los campos son obligatorios." });
+  }
+
   try {
     await db.query(
       "INSERT INTO docentes (nombres, apellidos, dni, hoja_vida, curso, turno) VALUES (?, ?, ?, ?, ?, ?)",

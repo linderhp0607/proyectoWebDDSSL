@@ -29,4 +29,8 @@ export class DocentesService {
   uploadHojaDeVida(id: number, formData: FormData): Observable<any> {
     return this.http.post(`${this.baseUrl}/${id}/upload`, formData);
   }
+
+  createDocente(formData: FormData): Observable<any> {
+    return this.http.post(`${this.baseUrl}`, formData);
+  }
 }
