@@ -28,26 +28,26 @@ export class AddComponent {
       this.docente.hoja_vida = file;
     }
   }
-  
+
   registrarDocente(): void {
     const formData = new FormData();
-    formData.append("nombres", this.docente.nombres);
-    formData.append("apellidos", this.docente.apellidos);
-    formData.append("dni", this.docente.dni);
-    formData.append("curso", this.docente.curso);
-    formData.append("turno", this.docente.turno);
+    formData.append('nombres', this.docente.nombres);
+    formData.append('apellidos', this.docente.apellidos);
+    formData.append('dni', this.docente.dni);
+    formData.append('curso', this.docente.curso);
+    formData.append('turno', this.docente.turno);
     if (this.docente.hoja_vida) {
-      formData.append("hoja_vida", this.docente.hoja_vida);
+      formData.append('hoja_vida', this.docente.hoja_vida);
     }
-  
+
     this.docentesService.createDocente(formData).subscribe(
       (response) => {
-        console.log("Docente registrado con éxito:", response);
+        console.log('Docente registrado con éxito:', response);
+        this.router.navigate(['/docentes']);
       },
       (error) => {
-        console.error("Error al registrar docente:", error);
+        console.error('Error al registrar docente:', error);
       }
     );
   }
-  
 }

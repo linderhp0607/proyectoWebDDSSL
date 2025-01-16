@@ -87,21 +87,25 @@
           </select>
         </td>
         <td>
-          <input
-            type="file"
-            (change)="onFileSelected($event, docente)"
-            [disabled]="!docente.editing"
-          />
-          <a
-            *ngIf="docente.hoja_vida"
-            [href]="'http://localhost:5000/uploads/' + docente.hoja_vida"
-            target="_blank"
-          >
-            Ver Hoja de Vida
-          </a>
-          <span *ngIf="!docente.hoja_vida"
-            >No se subió ninguna hoja de vida</span
-          >
+          <div *ngIf="docente.editing">
+            <input
+              type="file"
+              (change)="onFileSelected($event, docente)"
+              class="form-control"
+            />
+          </div>
+          <div *ngIf="!docente.editing">
+            <a
+              *ngIf="docente.hoja_vida"
+              [href]="'http://localhost:5000/uploads/' + docente.hoja_vida"
+              target="_blank"
+            >
+              Ver Hoja de Vida
+            </a>
+            <span *ngIf="!docente.hoja_vida"
+              >No se subió ninguna hoja de vida</span
+            >
+          </div>
         </td>
         <td>
           <button
