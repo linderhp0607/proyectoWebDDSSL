@@ -3,18 +3,26 @@ const router = express.Router();
 const teacherController = require("../controllers/teacherController");
 const upload = require("../config/upload");
 
-// Rutas existentes
+// Listar todos los docentes
 router.get("/", teacherController.getAllTeachers);
+
+// Buscar docente por DNI
 router.get("/dni/:dni", teacherController.getTeacherByDNI);
-router.post("/", upload.single("hoja_vida"), teacherController.createTeacher); // Aquí usamos multer para manejar la subida de la hoja de vida
+
+// Registrar un nuevo docente con hoja de vida
+router.post("/", upload.single("hoja_vida"), teacherController.createTeacher);
+
+// Actualizar un docente
 router.put("/:id", teacherController.updateTeacher);
+
+// Eliminar un docente
 router.delete("/:id", teacherController.deleteTeacher);
 
-// Nueva ruta para actualizar la hoja de vida
+// Subir o actualizar hoja de vida para un docente existente
 router.post(
   "/:id/upload",
   upload.single("hoja_vida"),
   teacherController.uploadHojaDeVida
 );
 
-module.exports = router; // Corrección del espacio aquí
+module.exports = router;

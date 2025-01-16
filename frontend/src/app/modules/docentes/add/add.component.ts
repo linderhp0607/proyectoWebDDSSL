@@ -23,39 +23,31 @@ export class AddComponent {
   ) {}
 
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-  }
-
-  registrarDocente(): void {
-    if (
-      !this.docente.nombres ||
-      !this.docente.apellidos ||
-      !this.docente.dni ||
-      !this.docente.curso ||
-      !this.docente.turno ||
-      !this.selectedFile
-    ) {
-      alert('Todos los campos son obligatorios.');
-      return;
+    const file = event.target.files[0];
+    if (file) {
+      this.docente.hoja_vida = file;
     }
-
+  }
+  
+  registrarDocente(): void {
     const formData = new FormData();
-    formData.append('nombres', this.docente.nombres);
-    formData.append('apellidos', this.docente.apellidos);
-    formData.append('dni', this.docente.dni);
-    formData.append('curso', this.docente.curso);
-    formData.append('turno', this.docente.turno);
-    formData.append('hoja_vida', this.selectedFile);
-
+    formData.append("nombres", this.docente.nombres);
+    formData.append("apellidos", this.docente.apellidos);
+    formData.append("dni", this.docente.dni);
+    formData.append("curso", this.docente.curso);
+    formData.append("turno", this.docente.turno);
+    if (this.docente.hoja_vida) {
+      formData.append("hoja_vida", this.docente.hoja_vida);
+    }
+  
     this.docentesService.createDocente(formData).subscribe(
-      () => {
-        alert('Docente registrado con éxito.');
-        this.router.navigate(['/docentes']);
+      (response) => {
+        console.log("Docente registrado con éxito:", response);
       },
       (error) => {
-        console.error(error);
-        alert('Error al registrar el docente.');
+        console.error("Error al registrar docente:", error);
       }
     );
   }
+  
 }

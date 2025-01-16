@@ -4,8 +4,10 @@ const path = require("path");
 // Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    const uploadPath = path.join(__dirname, "../uploads");
+    cb(null, uploadPath);
   },
+
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(

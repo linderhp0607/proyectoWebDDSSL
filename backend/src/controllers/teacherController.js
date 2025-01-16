@@ -29,12 +29,9 @@ exports.getTeacherByDNI = async (req, res) => {
   }
 };
 
-// Registrar un nuevo docente
 exports.createTeacher = async (req, res) => {
   const { nombres, apellidos, dni, curso, turno } = req.body;
   const hoja_vida = req.file?.filename;
-
-  console.log({ nombres, apellidos, dni, curso, turno, hoja_vida }); // Verifica los datos recibidos
 
   if (!nombres || !apellidos || !dni || !curso || !turno || !hoja_vida) {
     return res
@@ -47,7 +44,10 @@ exports.createTeacher = async (req, res) => {
       "INSERT INTO docentes (nombres, apellidos, dni, hoja_vida, curso, turno) VALUES (?, ?, ?, ?, ?, ?)",
       [nombres, apellidos, dni, hoja_vida, curso, turno]
     );
-    res.status(201).json({ message: "Docente registrado exitosamente" });
+    res.status(201).json({
+      message: "Docente registrado exitosamente",
+      hoja_vida_url: `http://localhost:5000/uploads/${hoja_vida}`, // Ruta pública para acceder al archivo
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
@@ -82,10 +82,14 @@ exports.deleteTeacher = async (req, res) => {
   }
 };
 
-// Subir hoja de vida
+// Subir hoja de vida para un docente existente
 exports.uploadHojaDeVida = async (req, res) => {
-  const id = req.params.id;
-  const fileName = req.file.filename; // Nombre del archivo subido
+  const { id } = req.params;
+  const fileName = req.file?.filename;
+
+  if (!fileName) {
+    return res.status(400).json({ message: "Debe subir un archivo PDF." });
+  }
 
   try {
     await db.query("UPDATE docentes SET hoja_vida = ? WHERE id_docente = ?", [
