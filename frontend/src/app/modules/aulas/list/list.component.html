@@ -1,6 +1,9 @@
 <div class="container mt-5">
-  <h2 class="text-center">Gestión de Aulas</h2>
-  <table class="table table-striped mt-3">
+  <h2 class="text-center">Listado de Aulas</h2>
+  <button class="btn btn-primary mb-3" routerLink="/aulas/assign">
+    Asignar Aula
+  </button>
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>#</th>
@@ -12,15 +15,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Juan Pérez</td>
-        <td>Pedro Ramírez</td>
-        <td>Aula 101</td>
-        <td>Mañana</td>
+      <tr *ngFor="let aula of aulas; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ aula.estudiante }}</td>
+        <td>{{ aula.docente }}</td>
+        <td>{{ aula.aula }}</td>
+        <td>{{ aula.turno }}</td>
         <td>
-          <button class="btn btn-warning btn-sm">Editar</button>
-          <button class="btn btn-danger btn-sm">Eliminar</button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteAula(aula.id_aula)"
+          >
+            Eliminar
+          </button>
         </td>
       </tr>
     </tbody>
