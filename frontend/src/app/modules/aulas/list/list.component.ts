@@ -19,11 +19,12 @@ export class ListComponent implements OnInit {
 
   loadAulas(): void {
     this.aulasService.getAllAulas().subscribe((data) => {
+      console.log('Datos recibidos del backend:', data);
       this.aulas = data.map((aula) => ({
         ...aula,
-        estudiante: `${aula.nombres} ${aula.apellidos}`, // Concatenar nombres y apellidos del estudiante
-        estudiante_dni: aula.estudiante_dni, // DNI del estudiante
-        docente: aula.docente, // Nombre del docente
+        estudiante: aula.estudiante || 'Sin asignar',
+        estudiante_dni: aula.estudiante_dni || 'N/A',
+        docente: aula.docente || 'Sin asignar',
       }));
     });
   }
@@ -31,8 +32,7 @@ export class ListComponent implements OnInit {
   // Función para buscar aulas por DNI del estudiante
   buscarPorDni(): void {
     if (this.searchDni.trim() === '') {
-      // Si el campo está vacío, recargar todas las aulas
-      this.loadAulas();
+      this.loadAulas(); // Recargar todas las aulas si el campo está vacío
       return;
     }
 
@@ -50,6 +50,8 @@ export class ListComponent implements OnInit {
           }
         }
       );
+    } else {
+      alert('El DNI debe tener 8 dígitos.');
     }
   }
 
@@ -67,22 +69,29 @@ export class ListComponent implements OnInit {
   }
 
   saveAula(aula: any): void {
-    if (!aula.id_estudiante || !aula.id_docente) {
-      alert('El estudiante o el docente no pueden estar vacíos.');
+    if (!aula.id_estudiante || !aula.id_docente || !aula.aula || !aula.turno) {
+      alert('Todos los campos deben estar completos antes de guardar.');
       return;
     }
 
-    this.aulasService.updateAula(aula.id_aula, aula).subscribe(
-      () => {
-        aula.editing = false; // Salir del modo edición
-        alert('Aula actualizada con éxito.');
-        this.loadAulas(); // Recargar listado
-      },
-      (error) => {
-        alert('Error al actualizar aula.');
-        console.error(error);
-      }
-    );
+    this.aulasService
+      .updateAula(aula.id_aula, {
+        id_estudiante: aula.id_estudiante,
+        id_docente: aula.id_docente,
+        aula: aula.aula,
+        turno: aula.turno,
+      })
+      .subscribe(
+        () => {
+          aula.editing = false; // Salir del modo edición
+          alert('Aula actualizada con éxito.');
+          this.loadAulas(); // Recargar listado
+        },
+        (error) => {
+          alert('Error al actualizar aula.');
+          console.error(error);
+        }
+      );
   }
 
   // Redirigir al módulo principal

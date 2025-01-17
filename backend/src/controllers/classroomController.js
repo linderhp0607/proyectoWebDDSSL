@@ -6,15 +6,16 @@ exports.getAllClassrooms = async (req, res) => {
   try {
     const [rows] = await db.query(`
       SELECT 
-        a.id_aula, 
-        CONCAT(e.nombres, ' ', e.apellidos) AS estudiante, 
-        e.dni AS estudiante_dni, 
-        CONCAT(d.nombres, ' ', d.apellidos) AS docente, 
-        a.aula, 
-        a.turno 
-      FROM aulas a
-      JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
-      JOIN docentes d ON a.id_docente = d.id_docente
+  a.id_aula, 
+  CONCAT(e.nombres, ' ', e.apellidos) AS estudiante, 
+  e.dni AS estudiante_dni, 
+  CONCAT(d.nombres, ' ', d.apellidos) AS docente, 
+  a.aula, 
+  a.turno 
+FROM aulas a
+JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
+JOIN docentes d ON a.id_docente = d.id_docente
+
     `);
     res.status(200).json(rows);
   } catch (error) {
@@ -71,13 +72,6 @@ exports.createClassroom = async (req, res) => {
 exports.updateClassroom = async (req, res) => {
   const { id } = req.params;
   const { id_estudiante, id_docente, aula, turno } = req.body;
-
-  if (!id_estudiante || !id_docente) {
-    return res
-      .status(400)
-      .json({ message: "Estudiante o docente no pueden ser nulos." });
-  }
-
   try {
     await db.query(
       "UPDATE aulas SET id_estudiante = ?, id_docente = ?, aula = ?, turno = ? WHERE id_aula = ?",

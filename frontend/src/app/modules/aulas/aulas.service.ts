@@ -27,8 +27,9 @@ export class AulasService {
   }
 
   updateAula(id: number, aula: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, aula);
-  }
+  return this.http.put(`${this.baseUrl}/${id}`, aula);
+}
+
 
   deleteAula(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);

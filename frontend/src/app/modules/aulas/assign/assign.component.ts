@@ -17,7 +17,9 @@ export class AssignComponent implements OnInit {
   };
   estudiante: any = null; // Información del estudiante
   docentes: any[] = [];
+  aulasDisponibles: string[] = []; // Lista de aulas disponibles
   mensajeEstudiante: string = '';
+  asignarHabilitado: boolean = false; // Controlar la habilitación de los campos y botón
 
   constructor(
     private aulasService: AulasService,
@@ -27,6 +29,7 @@ export class AssignComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDocentes();
+    this.loadAulas();
   }
 
   loadDocentes(): void {
@@ -35,22 +38,51 @@ export class AssignComponent implements OnInit {
     });
   }
 
+  loadAulas(): void {
+    this.aulasDisponibles = ['Aula 1', 'Aula 2', 'Aula 3', 'Aula 4']; // Aulas disponibles (puedes adaptarlo)
+  }
+
   verificarEstudiante(): void {
-    this.aulasService.getEstudianteByDni(this.aula.dni_estudiante).subscribe(
-      (estudiante: any) => {
-        this.estudiante = estudiante; // Guardar información del estudiante
-        this.aula.turno = estudiante.turno; // Asignar turno automáticamente
-        this.mensajeEstudiante = ''; // Limpiar mensajes de error
+    if (!this.aula.dni_estudiante.trim()) {
+      this.mensajeEstudiante = 'Debe ingresar un DNI.';
+      this.estudiante = null;
+      this.asignarHabilitado = false;
+      return;
+    }
+
+    // Verificar si el estudiante tiene aula asignada
+    this.aulasService.getAulaByDni(this.aula.dni_estudiante).subscribe(
+      (aula: any) => {
+        // Si el estudiante ya tiene aula
+        this.estudiante = { nombres: aula.nombres, apellidos: aula.apellidos };
+        this.mensajeEstudiante = `El estudiante ya tiene asignada el aula: ${aula.aula}, turno: ${aula.turno}.`;
+        this.asignarHabilitado = false; // Deshabilitar campos y botón
       },
       (error: any) => {
-        this.mensajeEstudiante = 'El estudiante no existe.';
-        this.estudiante = null; // Limpiar información previa
+        if (error.status === 404) {
+          // Si el estudiante no tiene aula, verificar existencia
+          this.aulasService
+            .getEstudianteByDni(this.aula.dni_estudiante)
+            .subscribe(
+              (estudiante: any) => {
+                this.estudiante = estudiante; // Mostrar información del estudiante
+                this.mensajeEstudiante =
+                  'El estudiante está disponible para asignar aula.';
+                this.asignarHabilitado = true; // Habilitar campos y botón
+              },
+              (err: any) => {
+                this.mensajeEstudiante = 'El estudiante no existe.';
+                this.estudiante = null;
+                this.asignarHabilitado = false; // Deshabilitar campos y botón
+              }
+            );
+        }
       }
     );
   }
 
   asignarAula(): void {
-    if (!this.estudiante) {
+    if (!this.asignarHabilitado) {
       alert('Debe verificar un estudiante antes de asignar un aula.');
       return;
     }
@@ -72,5 +104,9 @@ export class AssignComponent implements OnInit {
         console.error(error);
       }
     );
+  }
+
+  volver(): void {
+    this.router.navigate(['/aulas']); // Navegar a la lista de aulas
   }
 }

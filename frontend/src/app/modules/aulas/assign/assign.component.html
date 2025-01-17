@@ -1,6 +1,7 @@
 <div class="container mt-5">
   <h2 class="text-center">Asignar Aula</h2>
-  <form (ngSubmit)="asignarAula()">
+  <form>
+    <!-- DNI del Estudiante -->
     <div class="form-group">
       <label for="dni">DNI del Estudiante:</label>
       <input
@@ -18,18 +19,27 @@
       >
         Verificar Estudiante
       </button>
-      <p *ngIf="mensajeEstudiante" class="text-danger mt-2">
+    </div>
+
+    <!-- Mensaje sobre el estado del estudiante -->
+    <div class="mt-3" *ngIf="mensajeEstudiante">
+      <p
+        [class.text-danger]="!asignarHabilitado"
+        [class.text-success]="asignarHabilitado"
+      >
         {{ mensajeEstudiante }}
       </p>
     </div>
 
-    <div *ngIf="estudiante" class="mt-3">
+    <!-- Información del estudiante -->
+    <div *ngIf="estudiante && !asignarHabilitado" class="mt-3">
       <p>
         <strong>Estudiante:</strong> {{ estudiante.nombres }}
         {{ estudiante.apellidos }}
       </p>
     </div>
 
+    <!-- Docente -->
     <div class="form-group">
       <label for="docente">Docente:</label>
       <select
@@ -37,6 +47,7 @@
         [(ngModel)]="aula.id_docente"
         class="form-select"
         name="docente"
+        [disabled]="!asignarHabilitado"
         required
       >
         <option *ngFor="let docente of docentes" [value]="docente.id_docente">
@@ -45,6 +56,7 @@
       </select>
     </div>
 
+    <!-- Aula -->
     <div class="form-group">
       <label for="aula">Aula:</label>
       <input
@@ -53,22 +65,39 @@
         [(ngModel)]="aula.aula"
         class="form-control"
         name="aula"
+        [disabled]="!asignarHabilitado"
         required
       />
     </div>
 
+    <!-- Turno -->
     <div class="form-group">
       <label for="turno">Turno:</label>
-      <input
-        type="text"
+      <select
         id="turno"
         [(ngModel)]="aula.turno"
-        class="form-control"
+        class="form-select"
         name="turno"
-        readonly
-      />
+        [disabled]="!asignarHabilitado"
+        required
+      >
+        <option value="mañana">Mañana</option>
+        <option value="tarde">Tarde</option>
+        <option value="noche">Noche</option>
+      </select>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Asignar Aula</button>
+    <!-- Botones -->
+    <button
+      type="button"
+      class="btn btn-primary mt-3"
+      [disabled]="!asignarHabilitado"
+      (click)="asignarAula()"
+    >
+      Asignar Aula
+    </button>
+    <button type="button" class="btn btn-secondary mt-3" (click)="volver()">
+      Volver
+    </button>
   </form>
 </div>

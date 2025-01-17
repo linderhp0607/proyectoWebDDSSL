@@ -12,20 +12,21 @@ exports.getAllStudents = async (req, res) => {
 
 exports.getStudentByDni = async (req, res) => {
   const { dni } = req.params;
+
   try {
     const [rows] = await db.query(
-      `SELECT id_estudiante, nombres, apellidos, turno
-       FROM estudiantes
-       WHERE dni = ?`,
+      "SELECT id_estudiante, nombres, apellidos, dni FROM estudiantes WHERE dni = ?",
       [dni]
     );
+
     if (rows.length === 0) {
-      return res.status(404).json({ message: "El estudiante no existe." });
+      return res.status(404).json({ message: "Estudiante no encontrado" });
     }
-    res.status(200).json(rows[0]);
+
+    res.status(200).json(rows[0]); // Devuelve el primer resultado
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error en el servidor." });
+    res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
