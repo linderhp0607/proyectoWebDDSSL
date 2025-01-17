@@ -22,7 +22,7 @@ app.use("/api/auth", require("./routes/authRouter"));
 app.use("/api/students", require("./routes/studentRoutes"));
 app.use("/api/teachers", require("./routes/teacherRoutes"));
 app.use("/api/classrooms", require("./routes/classroomRoutes"));
-app.use("/api/aulas", aulaRoutes);
+app.use("/api/aulas", require("./routes/aulaRoutes"));
 
 // Iniciar servidor
 app.listen(PORT, () => {

@@ -1,11 +1,17 @@
 const db = require("../config/db");
 
 // Listar todas las aulas
+// Listar todas las aulas con el DNI del estudiante incluido
 exports.getAllClassrooms = async (req, res) => {
   try {
     const [rows] = await db.query(`
-      SELECT a.id_aula, e.nombres AS estudiante, e.apellidos AS estudiante_apellido, e.dni AS estudiante_dni, 
-             d.nombres AS docente, d.apellidos AS docente_apellido, a.aula, a.turno 
+      SELECT 
+        a.id_aula, 
+        CONCAT(e.nombres, ' ', e.apellidos) AS estudiante, 
+        e.dni AS estudiante_dni, 
+        CONCAT(d.nombres, ' ', d.apellidos) AS docente, 
+        a.aula, 
+        a.turno 
       FROM aulas a
       JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
       JOIN docentes d ON a.id_docente = d.id_docente
@@ -18,29 +24,25 @@ exports.getAllClassrooms = async (req, res) => {
 };
 
 // Buscar aula por DNI del estudiante
-exports.getClassroomByStudent = async (req, res) => {
+exports.getAulaByDni = async (req, res) => {
   const { dni } = req.params;
   try {
     const [rows] = await db.query(
-      `
-      SELECT a.id_aula, e.nombres AS estudiante, e.apellidos AS estudiante_apellido, 
-             d.nombres AS docente, d.apellidos AS docente_apellido, a.aula, a.turno 
-      FROM aulas a
-      JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
-      JOIN docentes d ON a.id_docente = d.id_docente
-      WHERE e.dni = ?
-    `,
+      `SELECT a.id_aula, e.nombres, e.apellidos, a.aula, a.turno
+       FROM aulas a
+       JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
+       WHERE e.dni = ?`,
       [dni]
     );
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ message: "Aula no encontrada para el estudiante" });
+        .json({ message: "El estudiante no tiene un aula asignada." });
     }
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error en el servidor" });
+    res.status(500).json({ message: "Error en el servidor." });
   }
 };
 
@@ -84,5 +86,22 @@ exports.deleteClassroom = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
+  }
+};
+
+exports.getEstudianteByDni = async (req, res) => {
+  const { dni } = req.params;
+  try {
+    const [rows] = await db.query(
+      `SELECT id_estudiante, nombres, apellidos, turno FROM estudiantes WHERE dni = ?`,
+      [dni]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "El estudiante no existe." });
+    }
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error en el servidor." });
   }
 };

@@ -1,49 +1,74 @@
 <div class="container mt-5">
   <h2 class="text-center">Asignar Aula</h2>
-  <form (ngSubmit)="assignAula()">
+  <form (ngSubmit)="asignarAula()">
     <div class="form-group">
-      <label for="id_estudiante">ID Estudiante:</label>
+      <label for="dni">DNI del Estudiante:</label>
       <input
         type="text"
-        id="id_estudiante"
-        [(ngModel)]="aula.id_estudiante"
-        name="id_estudiante"
+        id="dni"
+        [(ngModel)]="aula.dni_estudiante"
         class="form-control"
+        name="dni"
+        required
       />
+      <button
+        type="button"
+        class="btn btn-primary mt-2"
+        (click)="verificarEstudiante()"
+      >
+        Verificar Estudiante
+      </button>
+      <p *ngIf="mensajeEstudiante" class="text-danger mt-2">
+        {{ mensajeEstudiante }}
+      </p>
     </div>
+
+    <div *ngIf="estudiante" class="mt-3">
+      <p>
+        <strong>Estudiante:</strong> {{ estudiante.nombres }}
+        {{ estudiante.apellidos }}
+      </p>
+    </div>
+
     <div class="form-group">
-      <label for="id_docente">ID Docente:</label>
-      <input
-        type="text"
-        id="id_docente"
+      <label for="docente">Docente:</label>
+      <select
+        id="docente"
         [(ngModel)]="aula.id_docente"
-        name="id_docente"
-        class="form-control"
-      />
+        class="form-select"
+        name="docente"
+        required
+      >
+        <option *ngFor="let docente of docentes" [value]="docente.id_docente">
+          {{ docente.nombres }} {{ docente.apellidos }}
+        </option>
+      </select>
     </div>
+
     <div class="form-group">
       <label for="aula">Aula:</label>
       <input
         type="text"
         id="aula"
         [(ngModel)]="aula.aula"
-        name="aula"
         class="form-control"
+        name="aula"
+        required
       />
     </div>
+
     <div class="form-group">
       <label for="turno">Turno:</label>
-      <select
+      <input
+        type="text"
         id="turno"
         [(ngModel)]="aula.turno"
+        class="form-control"
         name="turno"
-        class="form-select"
-      >
-        <option value="mañana">Mañana</option>
-        <option value="tarde">Tarde</option>
-        <option value="noche">Noche</option>
-      </select>
+        readonly
+      />
     </div>
+
     <button type="submit" class="btn btn-primary mt-3">Asignar Aula</button>
   </form>
 </div>

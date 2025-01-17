@@ -1,12 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const studentController = require("../controllers/studentController");
+const studentController = require("../controllers/studentController"); // Asegúrate de que esta ruta sea válida
 
-// Rutas
-router.get("/", studentController.getAllStudents); // Listar estudiantes
-router.get("/:dni", studentController.getStudentByDNI); // Buscar por DNI
-router.post("/", studentController.createStudent); // Registrar estudiante
-router.put("/:id", studentController.updateStudent); // Actualizar estudiante
-router.delete("/:id", studentController.deleteStudent); // Eliminar estudiante
+// Ruta para obtener todos los estudiantes
+router.get("/", studentController.getAllStudents);
+
+// Ruta para buscar estudiante por DNI
+router.get("/dni/:dni", studentController.getStudentByDni);
+
+// Ruta para crear un nuevo estudiante
+router.post("/", studentController.createStudent);
+
+// Ruta para actualizar un estudiante
+router.put("/:id", studentController.updateStudent);
+
+// Ruta para eliminar un estudiante
+router.delete("/:id", studentController.deleteStudent);
 
 module.exports = router;

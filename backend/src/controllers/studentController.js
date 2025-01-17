@@ -1,6 +1,5 @@
 const db = require("../config/db");
 
-// Listar todos los estudiantes
 exports.getAllStudents = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM estudiantes");
@@ -11,48 +10,46 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
-// Buscar estudiante por DNI
-exports.getStudentByDNI = async (req, res) => {
+exports.getStudentByDni = async (req, res) => {
   const { dni } = req.params;
   try {
-    const [rows] = await db.query("SELECT * FROM estudiantes WHERE dni = ?", [
-      dni,
-    ]);
+    const [rows] = await db.query(
+      `SELECT id_estudiante, nombres, apellidos, turno
+       FROM estudiantes
+       WHERE dni = ?`,
+      [dni]
+    );
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Estudiante no encontrado" });
+      return res.status(404).json({ message: "El estudiante no existe." });
     }
     res.status(200).json(rows[0]);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error en el servidor" });
+    res.status(500).json({ message: "Error en el servidor." });
   }
 };
 
-// Registrar un nuevo estudiante
 exports.createStudent = async (req, res) => {
-  const { nombres, apellidos, dni, modalidad, carrera_profesional, turno } =
-    req.body;
+  const { nombres, apellidos, dni } = req.body;
   try {
     await db.query(
-      "INSERT INTO estudiantes (nombres, apellidos, dni, modalidad, carrera_profesional, turno) VALUES (?, ?, ?, ?, ?, ?)",
-      [nombres, apellidos, dni, modalidad, carrera_profesional, turno]
+      "INSERT INTO estudiantes (nombres, apellidos, dni) VALUES (?, ?, ?)",
+      [nombres, apellidos, dni]
     );
-    res.status(201).json({ message: "Estudiante registrado exitosamente" });
+    res.status(201).json({ message: "Estudiante creado exitosamente" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
   }
 };
 
-// Actualizar un estudiante
 exports.updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { nombres, apellidos, dni, modalidad, carrera_profesional, turno } =
-    req.body;
+  const { nombres, apellidos, dni } = req.body;
   try {
     await db.query(
-      "UPDATE estudiantes SET nombres = ?, apellidos = ?, dni = ?, modalidad = ?, carrera_profesional = ?, turno = ? WHERE id_estudiante = ?",
-      [nombres, apellidos, dni, modalidad, carrera_profesional, turno, id]
+      "UPDATE estudiantes SET nombres = ?, apellidos = ?, dni = ? WHERE id_estudiante = ?",
+      [nombres, apellidos, dni, id]
     );
     res.status(200).json({ message: "Estudiante actualizado exitosamente" });
   } catch (error) {
@@ -61,7 +58,6 @@ exports.updateStudent = async (req, res) => {
   }
 };
 
-// Eliminar un estudiante
 exports.deleteStudent = async (req, res) => {
   const { id } = req.params;
   try {

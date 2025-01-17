@@ -1,14 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const aulaController = require("../controllers/aulaController");
+const classroomController = require("../controllers/classroomController"); // Asegúrate de importar correctamente el controlador
 
-// Obtener todos los registros de aulas
-router.get("/", aulaController.getAllAulas);
+// Ruta para obtener todas las aulas
+router.get("/", classroomController.getAllClassrooms);
 
-// Actualizar aula y docente
-router.put("/:id_aula", aulaController.updateAula);
+// Ruta para obtener un aula por el DNI del estudiante
+router.get("/dni/:dni", classroomController.getAulaByDni);
 
-// Eliminar un registro de aula
-router.delete("/:id_aula", aulaController.deleteAula);
+// Ruta para crear una nueva aula
+router.post("/", classroomController.createClassroom);
+
+// Ruta para actualizar una aula
+router.put("/:id", classroomController.updateClassroom);
+
+// Ruta para eliminar una aula
+router.delete("/:id", classroomController.deleteClassroom);
 
 module.exports = router;

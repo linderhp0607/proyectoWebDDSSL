@@ -8,6 +8,7 @@
       <tr>
         <th>#</th>
         <th>Estudiante</th>
+        <th>DNI del Estudiante</th>
         <th>Docente</th>
         <th>Aula</th>
         <th>Turno</th>
@@ -18,18 +19,20 @@
       <tr *ngFor="let aula of aulas; let i = index">
         <td>{{ i + 1 }}</td>
         <td>{{ aula.estudiante }}</td>
+        <td>{{ aula.estudiante_dni }}</td> <!-- Mostrar el DNI -->
         <td>{{ aula.docente }}</td>
         <td>{{ aula.aula }}</td>
         <td>{{ aula.turno }}</td>
         <td>
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="deleteAula(aula.id_aula)"
-          >
+          <button class="btn btn-warning btn-sm" (click)="editAula(aula)">
+            Editar
+          </button>
+          <button class="btn btn-danger btn-sm" (click)="deleteAula(aula.id_aula)">
             Eliminar
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+  
 </div>

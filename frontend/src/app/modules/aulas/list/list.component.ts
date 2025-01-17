@@ -17,7 +17,7 @@ export class ListComponent implements OnInit {
 
   loadAulas(): void {
     this.aulasService.getAllAulas().subscribe((data) => {
-      this.aulas = data;
+      this.aulas = data; // Asegúrate de que los nombres de las propiedades coincidan
     });
   }
 
@@ -28,5 +28,22 @@ export class ListComponent implements OnInit {
         alert('Aula eliminada con éxito.');
       });
     }
+  }
+  editAula(aula: any): void {
+    aula.editing = true; // Habilitar el modo de edición
+  }
+
+  saveAula(aula: any): void {
+    this.aulasService.updateAula(aula.id_aula, aula).subscribe(
+      () => {
+        aula.editing = false; // Salir del modo de edición
+        this.loadAulas(); // Recargar la lista de aulas
+        alert('Aula actualizada con éxito.');
+      },
+      (error) => {
+        alert('Error al actualizar aula.');
+        console.error(error);
+      }
+    );
   }
 }
