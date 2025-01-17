@@ -1,8 +1,29 @@
 <div class="container mt-5">
   <h2 class="text-center">Listado de Aulas</h2>
+
+  <!-- Botones de navegación y búsqueda -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex mb-3">
+      <input
+        type="text"
+        [(ngModel)]="searchDni"
+        class="form-control me-2"
+        placeholder="Buscar por DNI"
+        (input)="buscarPorDni()"
+        style="width: 200px"
+      />
+      <button class="btn btn-primary" (click)="buscarPorDni()">Buscar</button>
+    </div>
+
+    <button class="btn btn-secondary mb-3" (click)="irInicio()">
+      Volver al Principal
+    </button>
+  </div>
+
   <button class="btn btn-primary mb-3" routerLink="/aulas/assign">
     Asignar Aula
   </button>
+
   <table class="table table-striped">
     <thead>
       <tr>
@@ -18,21 +39,65 @@
     <tbody>
       <tr *ngFor="let aula of aulas; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ aula.estudiante }}</td>
-        <td>{{ aula.estudiante_dni }}</td> <!-- Mostrar el DNI -->
-        <td>{{ aula.docente }}</td>
-        <td>{{ aula.aula }}</td>
-        <td>{{ aula.turno }}</td>
         <td>
-          <button class="btn btn-warning btn-sm" (click)="editAula(aula)">
+          <input
+            [(ngModel)]="aula.estudiante"
+            [readonly]="!aula.editing"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.estudiante_dni"
+            [readonly]="!aula.editing"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.docente"
+            [readonly]="!aula.editing"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.aula"
+            [readonly]="!aula.editing"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.turno"
+            [readonly]="!aula.editing"
+            class="form-control"
+          />
+        </td>
+        <td>
+          <button
+            *ngIf="!aula.editing"
+            class="btn btn-warning btn-sm"
+            (click)="editAula(aula)"
+          >
             Editar
           </button>
-          <button class="btn btn-danger btn-sm" (click)="deleteAula(aula.id_aula)">
+          <button
+            *ngIf="aula.editing"
+            class="btn btn-success btn-sm"
+            (click)="saveAula(aula)"
+          >
+            Guardar
+          </button>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="deleteAula(aula.id_aula)"
+          >
             Eliminar
           </button>
         </td>
       </tr>
+      
     </tbody>
   </table>
-  
 </div>

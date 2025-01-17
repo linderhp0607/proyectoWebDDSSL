@@ -28,10 +28,16 @@ exports.getAulaByDni = async (req, res) => {
   const { dni } = req.params;
   try {
     const [rows] = await db.query(
-      `SELECT a.id_aula, e.nombres, e.apellidos, a.aula, a.turno
-       FROM aulas a
-       JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
-       WHERE e.dni = ?`,
+      `
+      SELECT a.id_aula, a.aula, a.turno, 
+             CONCAT(e.nombres, ' ', e.apellidos) AS estudiante,
+             e.dni AS estudiante_dni,
+             CONCAT(d.nombres, ' ', d.apellidos) AS docente
+      FROM aulas a
+      JOIN estudiantes e ON a.id_estudiante = e.id_estudiante
+      JOIN docentes d ON a.id_docente = d.id_docente
+      WHERE e.dni = ?
+      `,
       [dni]
     );
     if (rows.length === 0) {
@@ -65,6 +71,13 @@ exports.createClassroom = async (req, res) => {
 exports.updateClassroom = async (req, res) => {
   const { id } = req.params;
   const { id_estudiante, id_docente, aula, turno } = req.body;
+
+  if (!id_estudiante || !id_docente) {
+    return res
+      .status(400)
+      .json({ message: "Estudiante o docente no pueden ser nulos." });
+  }
+
   try {
     await db.query(
       "UPDATE aulas SET id_estudiante = ?, id_docente = ?, aula = ?, turno = ? WHERE id_aula = ?",
@@ -73,7 +86,7 @@ exports.updateClassroom = async (req, res) => {
     res.status(200).json({ message: "Aula actualizada exitosamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error en el servidor" });
+    res.status(500).json({ message: "Error al actualizar aula" });
   }
 };
 
