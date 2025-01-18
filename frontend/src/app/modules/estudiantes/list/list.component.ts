@@ -8,12 +8,20 @@ import { EstudiantesService } from '../estudiantes.service';
 })
 export class ListComponent implements OnInit {
   estudiantes: any[] = [];
+  carreras: string[] = [];
   searchDni: string = ''; // Para almacenar el DNI ingresado
 
   constructor(private estudiantesService: EstudiantesService) {}
 
-  ngOnInit(): void {
-    this.loadAllEstudiantes();
+  loadCarreras(): void {
+    this.estudiantesService.getCarreras().subscribe(
+      (data) => {
+        this.carreras = data.map((carrera) => carrera.carrera_profesional);
+      },
+      (error) => {
+        console.error('Error al cargar las carreras:', error);
+      }
+    );
   }
 
   // Cargar todos los estudiantes
@@ -23,6 +31,11 @@ export class ListComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void {
+    this.loadAllEstudiantes();
+    this.loadCarreras();
+  }
+  
   // Buscar estudiante por DNI
   buscarPorDni(): void {
     if (this.searchDni.trim() === '') {
@@ -38,7 +51,7 @@ export class ListComponent implements OnInit {
 
     this.estudiantesService.getEstudianteByDni(this.searchDni).subscribe(
       (data) => {
-        this.estudiantes = [data]; // Mostrar solo el estudiante encontrado
+        this.estudiantes = [data];
         alert('Alumno encontrado');
       },
       (error) => {

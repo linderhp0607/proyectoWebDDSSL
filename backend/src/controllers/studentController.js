@@ -2,7 +2,17 @@ const db = require("../config/db");
 
 exports.getAllStudents = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM estudiantes");
+    const [rows] = await db.query(`
+      SELECT 
+        id_estudiante, 
+        nombres, 
+        apellidos, 
+        dni, 
+        modalidad, 
+        UPPER(carrera_profesional) AS carrera_profesional, -- Convertir todas las carreras a mayúsculas
+        turno
+      FROM estudiantes
+    `);
     res.status(200).json(rows);
   } catch (error) {
     console.error(error);
@@ -15,7 +25,8 @@ exports.getStudentByDni = async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      "SELECT id_estudiante, nombres, apellidos, dni FROM estudiantes WHERE dni = ?",
+      `SELECT id_estudiante, nombres, apellidos, dni, modalidad, carrera_profesional, turno
+       FROM estudiantes WHERE dni = ?`,
       [dni]
     );
 
@@ -23,7 +34,20 @@ exports.getStudentByDni = async (req, res) => {
       return res.status(404).json({ message: "Estudiante no encontrado" });
     }
 
-    res.status(200).json(rows[0]); // Devuelve el primer resultado
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error en el servidor" });
+  }
+};
+
+exports.getCarreras = async (req, res) => {
+  try {
+    const [rows] = await db.query(`
+      SELECT DISTINCT UPPER(carrera_profesional) AS carrera_profesional
+      FROM estudiantes
+    `);
+    res.status(200).json(rows);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error en el servidor" });
@@ -31,11 +55,28 @@ exports.getStudentByDni = async (req, res) => {
 };
 
 exports.createStudent = async (req, res) => {
-  const { nombres, apellidos, dni } = req.body;
+  const { nombres, apellidos, dni, modalidad, carrera_profesional, turno } =
+    req.body;
+
+  // Validar que todos los campos requeridos estén presentes
+  if (
+    !nombres ||
+    !apellidos ||
+    !dni ||
+    !modalidad ||
+    !carrera_profesional ||
+    !turno
+  ) {
+    return res.status(400).json({
+      message:
+        "Todos los campos son obligatorios para registrar al estudiante.",
+    });
+  }
+
   try {
     await db.query(
-      "INSERT INTO estudiantes (nombres, apellidos, dni) VALUES (?, ?, ?)",
-      [nombres, apellidos, dni]
+      "INSERT INTO estudiantes (nombres, apellidos, dni, modalidad, carrera_profesional, turno) VALUES (?, ?, ?, ?, ?, ?)",
+      [nombres, apellidos, dni, modalidad, carrera_profesional, turno]
     );
     res.status(201).json({ message: "Estudiante creado exitosamente" });
   } catch (error) {
@@ -46,16 +87,34 @@ exports.createStudent = async (req, res) => {
 
 exports.updateStudent = async (req, res) => {
   const { id } = req.params;
-  const { nombres, apellidos, dni } = req.body;
+  const { nombres, apellidos, dni, modalidad, carrera_profesional, turno } =
+    req.body;
+
+  // Validar que todos los campos están presentes
+  if (
+    !nombres ||
+    !apellidos ||
+    !dni ||
+    !modalidad ||
+    !carrera_profesional ||
+    !turno
+  ) {
+    return res
+      .status(400)
+      .json({ message: "Todos los campos son obligatorios." });
+  }
+
   try {
     await db.query(
-      "UPDATE estudiantes SET nombres = ?, apellidos = ?, dni = ? WHERE id_estudiante = ?",
-      [nombres, apellidos, dni, id]
+      `UPDATE estudiantes 
+       SET nombres = ?, apellidos = ?, dni = ?, modalidad = ?, carrera_profesional = ?, turno = ? 
+       WHERE id_estudiante = ?`,
+      [nombres, apellidos, dni, modalidad, carrera_profesional, turno, id]
     );
     res.status(200).json({ message: "Estudiante actualizado exitosamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error en el servidor" });
+    res.status(500).json({ message: "Error al actualizar el estudiante" });
   }
 };
 

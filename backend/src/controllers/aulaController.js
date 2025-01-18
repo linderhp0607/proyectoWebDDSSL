@@ -16,7 +16,7 @@ exports.getAllAulas = async (req, res) => {
     `;
 
   try {
-    const [results] = await db.query(query); // Usamos await con el pool de promesas
+    const [results] = await db.query(query); 
     res.json(results);
   } catch (err) {
     console.error(err);

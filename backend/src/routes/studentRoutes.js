@@ -17,4 +17,7 @@ router.put("/:id", studentController.updateStudent);
 // Ruta para eliminar un estudiante
 router.delete("/:id", studentController.deleteStudent);
 
+//listar las carreras
+router.get("/carreras", studentController.getCarreras);
+
 module.exports = router;

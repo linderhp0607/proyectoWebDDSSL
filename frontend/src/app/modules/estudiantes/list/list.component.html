@@ -40,6 +40,7 @@
     <tbody>
       <tr *ngFor="let estudiante of estudiantes; let i = index">
         <td>{{ i + 1 }}</td>
+        <!-- Nombres -->
         <td>
           <input
             [(ngModel)]="estudiante.nombres"
@@ -47,6 +48,7 @@
             class="form-control"
           />
         </td>
+        <!-- Apellidos -->
         <td>
           <input
             [(ngModel)]="estudiante.apellidos"
@@ -54,6 +56,7 @@
             class="form-control"
           />
         </td>
+        <!-- DNI -->
         <td>
           <input
             [(ngModel)]="estudiante.dni"
@@ -61,6 +64,7 @@
             class="form-control"
           />
         </td>
+        <!-- Modalidad -->
         <td>
           <select
             [(ngModel)]="estudiante.modalidad"
@@ -71,13 +75,19 @@
             <option value="extraordinario">Extraordinario</option>
           </select>
         </td>
+        <!-- Carrera (Combo Box) -->
         <td>
-          <input
+          <select
             [(ngModel)]="estudiante.carrera_profesional"
-            [readonly]="!estudiante.editing"
-            class="form-control"
-          />
+            [disabled]="!estudiante.editing"
+            class="form-select"
+          >
+            <option *ngFor="let carrera of carreras" [value]="carrera">
+              {{ carrera }}
+            </option>
+          </select>
         </td>
+        <!-- Turno -->
         <td>
           <select
             [(ngModel)]="estudiante.turno"
@@ -89,6 +99,7 @@
             <option value="noche">Noche</option>
           </select>
         </td>
+        <!-- Acciones -->
         <td>
           <button
             class="btn btn-warning btn-sm"

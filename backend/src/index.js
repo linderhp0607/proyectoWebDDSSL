@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware para servir archivos estáticos
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

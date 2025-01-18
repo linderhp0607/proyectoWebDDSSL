@@ -6,12 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class EstudiantesService {
-  private baseUrl = 'http://localhost:5000/api/students'; // Ajusta según tu backend
+  private baseUrl = 'http://localhost:5000/api/students'; // backend
 
   constructor(private http: HttpClient) {}
 
   getAllEstudiantes(): Observable<any> {
     return this.http.get(`${this.baseUrl}`);
+  }
+
+  getCarreras(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/carreras`);
   }
 
   addEstudiante(estudiante: any): Observable<any> {
@@ -27,7 +31,7 @@ export class EstudiantesService {
   }
 
   getEstudianteByDni(dni: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${dni}`);
+    return this.http.get(`${this.baseUrl}/dni/${dni}`);
   }
 
   createEstudiante(estudiante: any): Observable<any> {
