@@ -1,8 +1,9 @@
 <div class="container mt-5">
-  <h2 class="text-center">Listado de Aulas</h2>
-
-  <!-- Botones de navegación y búsqueda -->
+  <h2 class="text-center">Gestión de Aulas</h2>
+  <br />
+  <!-- Barra de herramientas -->
   <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Campo de búsqueda por DNI -->
     <div class="d-flex">
       <input
         type="text"
@@ -12,40 +13,80 @@
         (input)="buscarPorDni()"
         style="width: 200px"
       />
-      <button class="btn btn-primary" (click)="buscarPorDni()">Buscar</button>
+      <button class="btn btn-primary btn-sm" (click)="buscarPorDni()">
+        Buscar
+      </button>
     </div>
+
+    <!-- Botones de Asignar Aula e Inicio -->
     <div>
-      <button class="btn btn-secondary" (click)="irInicio()">Volver</button>
+      <button class="btn btn-success btn-sm me-2" routerLink="/aulas/assign">
+        Asignar Aula
+      </button>
+      <button class="btn btn-secondary btn-sm" (click)="irInicio()">Inicio</button>
     </div>
   </div>
-  
 
-  <button class="btn btn-primary mb-3" routerLink="/aulas/assign">
-    Asignar Aula
-  </button>
-
-  <table class="table table-striped">
+  <!-- Tabla de aulas -->
+  <table class="table table-striped table-sm mt-3">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Estudiante</th>
-        <th>DNI del Estudiante</th>
-        <th>Docente</th>
-        <th>Aula</th>
-        <th>Turno</th>
-        <th>Acciones</th>
+        <th style="width: 5%;">#</th>
+        <th style="width: 20%;">Estudiante</th>
+        <th style="width: 15%;">DNI</th>
+        <th style="width: 20%;">Docente</th>
+        <th style="width: 10%;">Aula</th>
+        <th style="width: 10%;">Turno</th>
+        <th style="width: 20%;" class="text-center">Acciones</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let aula of aulas; let i = index">
         <td>{{ i + 1 }}</td>
-        <td>{{ aula.estudiante }}</td>
-        <td>{{ aula.estudiante_dni }}</td>
-        <td>{{ aula.docente }}</td>
-        <td>{{ aula.aula }}</td>
-        <td>{{ aula.turno }}</td>
         <td>
-          <button class="btn btn-warning btn-sm" (click)="editAula(aula)">
+          <input
+            [(ngModel)]="aula.estudiante"
+            [readonly]="!aula.editing"
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.estudiante_dni"
+            [readonly]="!aula.editing"
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.docente"
+            [readonly]="!aula.editing"
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <input
+            [(ngModel)]="aula.aula"
+            [readonly]="!aula.editing"
+            class="form-control form-control-sm"
+          />
+        </td>
+        <td>
+          <select
+            [(ngModel)]="aula.turno"
+            [disabled]="!aula.editing"
+            class="form-select form-select-sm"
+          >
+            <option value="mañana">Mañana</option>
+            <option value="tarde">Tarde</option>
+            <option value="noche">Noche</option>
+          </select>
+        </td>
+        <td class="text-center">
+          <button
+            class="btn btn-warning btn-sm me-1"
+            (click)="editAula(aula)"
+          >
             Editar
           </button>
           <button
