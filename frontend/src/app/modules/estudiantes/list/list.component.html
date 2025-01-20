@@ -1,22 +1,19 @@
 <div class="container mt-5">
   <h2 class="text-center">Gestión de Estudiantes</h2>
   <br />
-  <!-- Barra de herramientas -->
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <!-- Campo de búsqueda por DNI -->
     <div class="d-flex">
       <input
         type="text"
         [(ngModel)]="searchDni"
         class="form-control me-2"
         placeholder="Buscar por DNI"
-        (input)="buscarPorDni()"
+        maxlength="8"
+        (input)="onDniInput()"
         style="width: 200px"
       />
       <button class="btn btn-primary" (click)="buscarPorDni()">Buscar</button>
     </div>
-
-    <!-- Botones de Inicio y Registrar Estudiante -->
     <div>
       <button class="btn btn-success me-2" routerLink="/estudiantes/add">
         Registrar Estudiante
@@ -24,19 +21,17 @@
       <button class="btn btn-secondary" routerLink="/auth/home">Inicio</button>
     </div>
   </div>
-
-  <!-- Tabla de estudiantes -->
-  <table class="table table-striped  mt-3">
+  <table class="table table-striped mt-3">
     <thead>
       <tr>
-        <th style="width: 5%;">#</th>
-        <th style="width: 15%;">Nombres</th>
-        <th style="width: 15%;">Apellidos</th>
-        <th style="width: 10%;">DNI</th>
-        <th style="width: 10%;">Modalidad</th>
-        <th style="width: 20%;">Carrera</th>
-        <th style="width: 10%;">Turno</th>
-        <th style="width: 15%;" class="text-center">Acciones</th>
+        <th style="width: 5%">#</th>
+        <th style="width: 15%">Nombres</th>
+        <th style="width: 15%">Apellidos</th>
+        <th style="width: 10%">DNI</th>
+        <th style="width: 10%">Modalidad</th>
+        <th style="width: 20%">Carrera</th>
+        <th style="width: 10%">Turno</th>
+        <th style="width: 15%" class="text-center">Acciones</th>
       </tr>
     </thead>
     <tbody>

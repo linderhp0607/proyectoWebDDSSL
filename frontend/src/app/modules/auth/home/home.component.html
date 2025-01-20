@@ -1,20 +1,21 @@
-<div class="container mt-5 text-center">
+<div class="container mt-5 text-center position-relative">
   <h1>Bienvenido, Admin</h1>
   <p class="lead">Seleccione una opción para gestionar:</p>
 
-  <div class="d-flex justify-content-center my-5">
-    <div class="btn-group-vertical gap-3">
-      <button class="btn btn-primary btn-lg" routerLink="/estudiantes">
-        Gestión de Estudiantes
-      </button>
-      <button class="btn btn-secondary btn-lg" routerLink="/docentes">
-        Gestión de Docentes
-      </button>
-      <button class="btn btn-success btn-lg" routerLink="/aulas">
-        Gestión de Aulas
-      </button>
-    </div>
+  <div class="triangle-container">
+    <!-- Estudiantes (punta superior) -->
+    <button class="btn btn-primary btn-lg triangle-btn top" routerLink="/estudiantes">
+      Gestión de Estudiantes
+    </button>
+    <!-- Docentes (esquina inferior izquierda) -->
+    <button class="btn btn-secondary btn-lg triangle-btn bottom-left" routerLink="/docentes">
+      Gestión de Docentes
+    </button>
+    <!-- Aulas (esquina inferior derecha) -->
+    <button class="btn btn-success btn-lg triangle-btn bottom-right" routerLink="/aulas">
+      Gestión de Aulas
+    </button>
   </div>
 
-  <button class="btn btn-danger mt-4" routerLink="/auth">Cerrar Sesión</button>
+  <button class="btn btn-danger mt-2" routerLink="/auth">Cerrar Sesión</button>
 </div>

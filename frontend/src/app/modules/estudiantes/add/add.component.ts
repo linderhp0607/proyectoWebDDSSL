@@ -33,4 +33,8 @@ export class AddComponent {
       }
     );
   }
+
+  volver(): void {
+    this.router.navigate(['/estudiantes']);
+  }
 }

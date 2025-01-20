@@ -25,7 +25,7 @@ exports.getStudentByDni = async (req, res) => {
 
   try {
     const [rows] = await db.query(
-      `SELECT id_estudiante, nombres, apellidos, dni, modalidad, carrera_profesional, turno
+      `SELECT id_estudiante, nombres, apellidos, dni, modalidad, UPPER(carrera_profesional) AS carrera_profesional, turno
        FROM estudiantes WHERE dni = ?`,
       [dni]
     );

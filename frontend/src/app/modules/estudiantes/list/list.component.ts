@@ -10,6 +10,7 @@ export class ListComponent implements OnInit {
   estudiantes: any[] = [];
   carreras: string[] = [];
   searchDni: string = ''; // Para almacenar el DNI ingresado
+  originalEstudiante: any = null; // Almacena una copia del estudiante original
 
   constructor(private estudiantesService: EstudiantesService) {}
 
@@ -24,7 +25,6 @@ export class ListComponent implements OnInit {
     );
   }
 
-  // Cargar todos los estudiantes
   loadAllEstudiantes(): void {
     this.estudiantesService.getAllEstudiantes().subscribe((data: any[]) => {
       this.estudiantes = data.map((est: any) => ({ ...est, editing: false }));
@@ -35,23 +35,22 @@ export class ListComponent implements OnInit {
     this.loadAllEstudiantes();
     this.loadCarreras();
   }
-  
-  // Buscar estudiante por DNI
+
   buscarPorDni(): void {
     if (this.searchDni.trim() === '') {
-      // Si el campo está vacío, recargar todos los estudiantes
-      this.loadAllEstudiantes();
+      alert('Por favor, ingrese un DNI para realizar la búsqueda.');
       return;
     }
 
-    if (this.searchDni.length !== 8) {
-      // No realizar la búsqueda si el DNI no tiene 8 dígitos
+    if (this.searchDni.length !== 8 || isNaN(Number(this.searchDni))) {
+      alert('El DNI debe contener exactamente 8 dígitos numéricos.');
       return;
     }
 
     this.estudiantesService.getEstudianteByDni(this.searchDni).subscribe(
       (data) => {
         this.estudiantes = [data];
+        this.loadCarreras();
         alert('Alumno encontrado');
       },
       (error) => {
@@ -60,23 +59,34 @@ export class ListComponent implements OnInit {
         } else {
           alert('Error al buscar el estudiante');
         }
-        this.loadAllEstudiantes(); // Recargar la lista completa en caso de error
+        this.loadAllEstudiantes();
       }
     );
   }
 
-  // Habilitar edición de estudiante
   editEstudiante(estudiante: any): void {
+    this.originalEstudiante = { ...estudiante }; // Clonar el estado inicial
     estudiante.editing = true;
   }
 
-  // Guardar cambios del estudiante
   saveEstudiante(estudiante: any): void {
+    const { id_estudiante, ...currentData } = estudiante; // Excluir ID para comparación
+    const { id_estudiante: idOriginal, ...originalData } =
+      this.originalEstudiante;
+
+    // Comprobar si hay diferencias entre los datos actuales y los originales
+    if (JSON.stringify(currentData) === JSON.stringify(originalData)) {
+      alert('No se registraron cambios en el estudiante.');
+      estudiante.editing = false; // Salir del modo de edición sin cambios
+      return;
+    }
+
     this.estudiantesService
-      .updateEstudiante(estudiante.id_estudiante, estudiante)
+      .updateEstudiante(id_estudiante, estudiante)
       .subscribe(
         () => {
           estudiante.editing = false;
+          this.originalEstudiante = null; // Restablecer los datos originales
           alert('Estudiante actualizado con éxito.');
         },
         (error) => {
@@ -85,7 +95,6 @@ export class ListComponent implements OnInit {
       );
   }
 
-  // Eliminar estudiante
   deleteEstudiante(id: number): void {
     if (confirm('¿Estás seguro de que deseas eliminar este estudiante?')) {
       this.estudiantesService.deleteEstudiante(id).subscribe(
@@ -99,6 +108,12 @@ export class ListComponent implements OnInit {
           alert('Error al eliminar estudiante.');
         }
       );
+    }
+  }
+
+  onDniInput(): void {
+    if (this.searchDni.trim() === '') {
+      this.loadAllEstudiantes();
     }
   }
 }
