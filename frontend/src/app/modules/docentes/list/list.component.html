@@ -10,9 +10,11 @@
         [(ngModel)]="searchDni"
         class="form-control me-2"
         placeholder="Buscar por DNI"
-        (input)="buscarPorDni()"
+        maxlength="8"
+        (input)="onDniInput()"
         style="width: 200px"
       />
+
       <button class="btn btn-primary" (click)="buscarPorDni()">Buscar</button>
     </div>
 
@@ -97,7 +99,7 @@
           <div *ngIf="!docente.editing">
             <a
               *ngIf="docente.hoja_vida"
-              [href]="'http://localhost:5000/uploads/' + docente.hoja_vida"
+              [href]="docente.hoja_vida_url"
               target="_blank"
             >
               Ver Hoja de Vida

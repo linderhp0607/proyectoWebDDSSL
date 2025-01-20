@@ -32,28 +32,27 @@ export class ListComponent implements OnInit {
 
   buscarPorDni(): void {
     if (this.searchDni.trim() === '') {
-      this.loadAllDocentes(); // Si el campo está vacío, carga todos los docentes
+      alert('Por favor, ingrese un DNI para realizar la búsqueda.');
       return;
     }
 
-    if (this.searchDni.trim().length !== 8) {
-      // No hacer nada si el DNI no tiene 8 caracteres
+    if (this.searchDni.length !== 8 || isNaN(Number(this.searchDni))) {
+      alert('El DNI debe contener exactamente 8 dígitos numéricos.');
       return;
     }
 
     this.docentesService.getDocenteByDni(this.searchDni).subscribe(
       (data) => {
         this.docentes = [data];
-        alert('Docente encontrado');
+        alert('Docente encontrado.');
       },
       (error) => {
         if (error.status === 404) {
-          alert('Docente no encontrado');
-          this.loadAllDocentes();
+          alert('Docente no encontrado.');
         } else {
-          alert('Error al buscar docente');
-          this.loadAllDocentes();
+          alert('Error al buscar el docente.');
         }
+        this.loadAllDocentes();
       }
     );
   }
@@ -88,31 +87,35 @@ export class ListComponent implements OnInit {
     }
   }
 
+  registrarDocente(): void {
+    this.router.navigate(['/docentes/add']);
+  }
+
+  irInicio(): void {
+    this.router.navigate(['/auth/home']);
+  }
+
   onFileSelected(event: any, docente: any): void {
     const file: File = event.target.files[0];
     if (file) {
       const formData = new FormData();
       formData.append('hoja_vida', file);
 
-      this.docentesService
-        .uploadHojaDeVida(docente.id_docente, formData)
-        .subscribe(
-          (response) => {
-            alert('Hoja de vida subida con éxito.');
-            docente.hoja_vida = response.fileName;
-          },
-          (error) => {
-            alert('Error al subir la hoja de vida.');
-          }
-        );
+      this.docentesService.uploadHojaDeVida(docente.id_docente, formData).subscribe(
+        (response) => {
+          alert('Hoja de vida subida con éxito.');
+          docente.hoja_vida = response.fileName;
+        },
+        (error) => {
+          alert('Error al subir la hoja de vida.');
+        }
+      );
     }
   }
 
-  registrarDocente(): void {
-    this.router.navigate(['/docentes/add']); // Ruta al formulario de registro
-  }
-
-  irInicio(): void {
-    this.router.navigate(['/auth/home']); // Redirige a auth/home
+  onDniInput(): void {
+    if (this.searchDni.trim() === '') {
+      this.loadAllDocentes();
+    }
   }
 }

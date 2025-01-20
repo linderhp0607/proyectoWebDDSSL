@@ -42,12 +42,27 @@ export class AddComponent {
 
     this.docentesService.createDocente(formData).subscribe(
       (response) => {
-        console.log('Docente registrado con éxito:', response);
-        this.router.navigate(['/docentes']);
+        alert('Docente registrado con éxito.');
+        this.router.navigate(['/docentes']); // Redirigir a gestión de docentes
       },
       (error) => {
+        alert('Error al registrar docente. Por favor, verifique los campos.');
         console.error('Error al registrar docente:', error);
       }
+    );
+  }
+
+  volver(): void {
+    this.router.navigate(['/docentes']); // Redirigir a gestión de docentes
+  }
+
+  isFormValid(): boolean {
+    return (
+      this.docente.nombres.trim() !== '' &&
+      this.docente.apellidos.trim() !== '' &&
+      this.docente.dni.trim().length === 8 &&
+      this.docente.curso !== '' &&
+      this.docente.turno !== ''
     );
   }
 }

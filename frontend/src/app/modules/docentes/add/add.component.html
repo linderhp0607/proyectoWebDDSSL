@@ -1,7 +1,7 @@
 <div class="container mt-5">
   <h2 class="text-center">Registrar Docente</h2>
   <form (ngSubmit)="registrarDocente()" enctype="multipart/form-data">
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="nombres">Nombres:</label>
       <input
         type="text"
@@ -9,10 +9,11 @@
         name="nombres"
         [(ngModel)]="docente.nombres"
         class="form-control"
+        required
       />
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="apellidos">Apellidos:</label>
       <input
         type="text"
@@ -20,10 +21,11 @@
         name="apellidos"
         [(ngModel)]="docente.apellidos"
         class="form-control"
+        required
       />
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="dni">DNI:</label>
       <input
         type="text"
@@ -31,17 +33,22 @@
         name="dni"
         [(ngModel)]="docente.dni"
         class="form-control"
+        maxlength="8"
+        pattern="\d*"
+        required
       />
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="curso">Curso:</label>
       <select
         id="curso"
         name="curso"
         [(ngModel)]="docente.curso"
         class="form-select"
+        required
       >
+        <option value="" disabled selected>Seleccione un curso</option>
         <option value="matematica">Matemática</option>
         <option value="literatura">Literatura</option>
         <option value="fisica">Física</option>
@@ -49,21 +56,23 @@
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="turno">Turno:</label>
       <select
         id="turno"
         name="turno"
         [(ngModel)]="docente.turno"
         class="form-select"
+        required
       >
+        <option value="" disabled selected>Seleccione un turno</option>
         <option value="mañana">Mañana</option>
         <option value="tarde">Tarde</option>
         <option value="noche">Noche</option>
       </select>
     </div>
 
-    <div class="form-group">
+    <div class="form-group mb-3">
       <label for="hoja_vida">Hoja de Vida:</label>
       <input
         type="file"
@@ -73,8 +82,21 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">
-      Registrar Docente
-    </button>
+    <div class="d-flex justify-content-between">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="volver()"
+      >
+        Volver
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="!isFormValid()"
+      >
+        Registrar Docente
+      </button>
+    </div>
   </form>
 </div>
